@@ -4,10 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Slidebar from "../Slidebar";
 import NavHeader from "../NavHeader";
 import { useMemo } from 'react';
+import 'smart-webcomponents-react/source/styles/smart.default.css';
+// import { Grid } from 'smart-webcomponents-react/grid';
 // const [jsonData1, setJsonData1] = useState([]);
 // import { MaterialReactTable } from "material-react-table";
-// import MaterialReactTable from 'material-react-table';
-import { MDBDataTable } from "mdbreact";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
+// import { MDBDataTable } from "mdbreact";
 
 
 function Report() {
@@ -133,7 +138,7 @@ function Report() {
 
   return (
     <>
-   <MDBDataTable striped bordered small data={datatable} />
+   {/* <MDBDataTable striped bordered small data={datatable} /> */}
       {/********************
   Preloader start test
     *********************/}
@@ -164,7 +169,7 @@ function Report() {
         {/***********************************
       Content body start
   ************************************/}
-    
+    <MaterialReactTable />
         {/***********************************
       Content body end
   ************************************/}
