@@ -98,6 +98,7 @@ function RestaurantPayment() {
   const firstIndex = lastIndex - recordsPerPage;
   const records = data.slice(firstIndex, lastIndex);
   const npage = Math.ceil(data.length / recordsPerPage);
+  
   const numbers = [...Array(npage + 1).keys()].slice(1);
 
   const search = (val) => {
@@ -542,7 +543,7 @@ function RestaurantPayment() {
                           <th>Amount</th>
                           <th>Status</th>
                           <th>Date &amp; Time</th>
-
+                          <th>action</th>
                           <th />
                         </tr>
                       </thead>
@@ -616,7 +617,11 @@ function RestaurantPayment() {
                             
                           </td>
                           */}
+                          <td>
+                            download
+                          </td>
                           </tr>
+                          
                         ))}
                       </tbody>
                     </table>

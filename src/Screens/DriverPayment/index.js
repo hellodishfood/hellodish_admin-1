@@ -5,8 +5,14 @@ import NavHeader from "../NavHeader";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { baseurl } from "../../Utilities/Api";
 import Loader from "../Loader";
+import * as XLSX from "xlsx"
+import { useRef, forwardRef } from "react";
+import { useReactToPrint } from "react-to-print";
+import Html2Pdf from "js-html2pdf";
+
 
 function Driverpayment() {
+  const componentRef = useRef();
   const location = useLocation();
   const data1 = location?.state?.data;
   const [data, setData] = useState([]);
@@ -22,11 +28,85 @@ function Driverpayment() {
   const records = data.slice(firstIndex, lastIndex);
   const npage = Math.ceil(data.length / recordsPerPage);
   const numbers = [...Array(npage + 1).keys()].slice(1);
+  const [selectedOption, setSelectedOption] = useState('users');
 
   useEffect(() => {
     GetAllPayment();
   }, []);
+  
+  // const columnOrder1 = [
+  //   "name",
+  //   "Phone",
+  //   "Email",
+  // ]
 
+  const columnOrder1 = [
+    // "No",
+    "orderID",
+    // "transactionID",
+    // "Food",
+    "Amount",
+    // "Status",
+    // "Date & Time"
+
+  ];
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onPrintError: (error) => console.log(error),
+    print: async (printIframe) => {
+      console.log(printIframe);
+      const document = printIframe.contentDocument;
+      if (document) {
+        const ticketElement = document.getElementsByClassName("ticket")[0];
+        ticketElement.style.display = "block";
+        const options = {
+          margin: 0,
+          filename: "ticket.pdf",
+          jsPDF: { unit: "px", format: [600, 800], orientation: "portrait" },
+        };
+        const exporter = new Html2Pdf(ticketElement, options);
+        await exporter.getPdf(options);
+      }
+    },
+  });
+  const downloadCSV = () => {
+    // Add "No" field to each item in jsonData
+    const jsonDataWithNo = data.map((item, index) => (
+      // console.log("itemitemitem",item),
+      {
+      // No: index + 1, // Adding 1 to make it 1-based index
+      ...item,
+    }));
+    
+    // Create a new array with the modified data
+    const newjsondata = jsonDataWithNo.map(element => (
+      {
+      // ...element,
+    orderID: element._id,
+      Amount:element.amount,
+      DateTime:element.createdAt,
+    }));
+  
+    // Convert JSON data to worksheet with specified columns only
+    const ws = XLSX.utils.json_to_sheet(newjsondata, {
+      header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
+    });
+  
+    // Convert the worksheet to CSV
+    const csv = XLSX.utils.sheet_to_csv(ws, {
+      header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
+    });
+  
+    // Create a blob from the CSV and download it
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `report.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  
   const GetAllPayment = () => {
     setLoad(true);
     const myHeaders = new Headers();
@@ -250,6 +330,7 @@ function Driverpayment() {
                       </h2>
                     </div>
                   </div>
+                  
                   <div className="col-lg-4 col-md-4">
                     <div>
                       <p className="mb-0">
@@ -261,6 +342,19 @@ function Driverpayment() {
                     </div>
                   </div>
                 </div>
+                {/* <button
+                           style={{marginLeft:"-90px"}}
+                type="button"
+                class="btn btn-primary mt-0 me-3"
+                data-bs-dismiss="modal"
+                onClick={handlePrint}
+                  // onClick={() => {
+                  //   Add();
+                  // }}
+              >
+                Print
+              </button> */}
+            
                 <div className="row">
                   <div className="col-lg-3 d-none d-lg-block"></div>
 
@@ -293,6 +387,18 @@ function Driverpayment() {
                       Settelment
                     </a>
                   </div>
+                  <button
+              style={{marginLeft:"-20 px",height:"40px",width:"100px",marginLeft:"78%"}}
+                type="button"
+                class="btn btn-primary mt-0 me-3"
+                data-bs-dismiss="modal"
+                onClick={downloadCSV}
+                  // onClick={() => {
+                  //   Add();
+                  // }}
+              >
+                Download
+              </button>
                 </div>
               </div>
             </div>

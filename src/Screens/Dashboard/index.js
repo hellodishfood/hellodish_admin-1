@@ -4,7 +4,13 @@ import Slidebar from "../Slidebar";
 import { baseurl } from "../../Utilities/Api";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { Modal, Button } from 'react-bootstrap';
 import { Area } from "@ant-design/plots";
+import moment from "moment"
 
 import Loader from "../Loader";
 import { useAuth } from "../../contexts/auth";
@@ -117,10 +123,78 @@ const Dashboard = () => {
   const [date, setDate] = useState("");
   const [fsdate, setfsDate] = useState("");
   const [fedate, setfeDate] = useState("");
+  const [fsdate1, setfsDate1] = useState("");
+  const [downloadRang,setDownloadRang] = useState({})
+  const [fedate1, setfeDate1] = useState("");
   const [cdate, setcDate] = useState("");
   const [load, setLoad] = useState(false);
   const [pname, setpname] = useState("");
   const [pimage, setpimage] = useState("");
+  const [isOpen, setOpen] = useState(false);
+  // const [downloadRang, setDownloadRang] = useState(null);
+  const [showDownloadButton, setShowDownloadButton] = useState(false);
+
+  const [startDate, setStartDate] = useState(null);
+  const [jsonData, setJsonData] = useState([]);
+  // const [endDate, setEndDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const handleDateChange = (dates) => {
+
+    const [start, end] = dates;
+
+    setStartDate(start);
+
+    setEndDate(end);
+
+  };
+  const handleEndDateChange = (date) => {
+
+    setEndDate(date);
+
+  };
+
+  // const downloadCSV = () => {
+  //   // const downloadRang = {
+  //   //   "status": true,
+  //   //   "totalAmount": 0,
+  //   //   "gstCharge": 0,
+  //   //   "deliveryCharge": 0,
+  //   //   "adminCommission": 0
+  //   // };
+  
+  //   // Extract headers dynamically from the object's keys
+  //   const headers = Object.keys(downloadRang);
+    
+  //   // Create CSV content
+  //   const csvContent = [
+  //     headers.join(','), // Add headers row
+  //     headers.map(header => downloadRang[header]).join(',') // Add data row
+  //   ].join('\n');
+  
+  //   // Create a Blob object from CSV content
+  //   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  
+  //   // Create a link element for download
+  //   const link = document.createElement('a');
+  //   link.href = URL.createObjectURL(blob);
+  //   link.download = 'data.csv';
+  //   link.click();
+  // }
+  const downloadCSV = () => {
+    const headers = Object.keys(downloadRang);
+    const csvContent = [
+      headers.join(','), // Add headers row
+      headers.map(header => downloadRang[header]).join(',') // Add data row
+    ].join('\n');
+  
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'data.csv';
+    link.click();
+  }
+  
+  const handleClose = () => setOpen(false);
   const [week, setWeek] = useState([]);
   const [month, setMonth] = useState([]);
   const [year, setYear] = useState([]);
@@ -432,7 +506,28 @@ const Dashboard = () => {
         console.error(error);
       });
   }
+  const handleApply = () => {
+    let token = localStorage.getItem("authToken");
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
 
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`${baseurl}customer/api/totalSell?startDate=${moment(fsdate1).format('YYYY-MM-DD')}&endDate=${moment(fedate1).format('YYYY-MM-DD')}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result, "result");
+        setDownloadRang(result);
+        setShowDownloadButton(true); // Show the download button after fetching data
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
   return (
     <>
       {isLoading ? (
@@ -506,9 +601,8 @@ const Dashboard = () => {
                           <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item ">
                               <a
-                                class={`nav-link ${
-                                  selected === "date" && "active"
-                                }`}
+                                class={`nav-link ${selected === "date" && "active"
+                                  }`}
                                 data-bs-toggle="modal"
                                 data-bs-target="#calendarModal"
                                 // href="#day"
@@ -519,9 +613,8 @@ const Dashboard = () => {
                             </li>
                             <li class="nav-item">
                               <a
-                                class={`nav-link ${
-                                  selected === "week" && "active"
-                                }`}
+                                class={`nav-link ${selected === "week" && "active"
+                                  }`}
                                 // data-bs-toggle="tab"
                                 data-bs-toggle="modal"
                                 data-bs-target="#weekModal"
@@ -533,9 +626,8 @@ const Dashboard = () => {
                             </li>
                             <li class="nav-item">
                               <a
-                                class={`nav-link ${
-                                  selected === "month" && "active"
-                                }`} //active
+                                class={`nav-link ${selected === "month" && "active"
+                                  }`} //active
                                 // data-bs-toggle="tab"
                                 data-bs-toggle="modal"
                                 data-bs-target="#monthModal"
@@ -547,9 +639,8 @@ const Dashboard = () => {
                             </li>
                             <li class="nav-item">
                               <a
-                                class={`nav-link ${
-                                  selected === "year" && "active"
-                                }`}
+                                class={`nav-link ${selected === "year" && "active"
+                                  }`}
                                 // data-bs-toggle="tab"
                                 data-bs-toggle="modal"
                                 data-bs-target="#yearModal"
@@ -713,16 +804,64 @@ const Dashboard = () => {
                                 stroke-linejoin="round"
                               />
                             </svg>
+                        
                           </div>
                           {/* <div class="pils">+ 2.0%</div> */}
+                          <button 
+  onClick={() => setOpen(true)} 
+  c 
+  style={{ marginTop: -20}}
+  lassName="btn btn-primary"
+>
+  <FontAwesomeIcon icon={faEye} />
+</button>
                         </div>
                         <div>
                           <p class="mb-0">Total Sale</p>
                           <h5>₹ {data?.totalSales?.toFixed(2)}</h5>
                         </div>
+                     
+                        <Modal show={isOpen} onHide={handleClose}>
+                          <Modal.Header closeButton>
+                            <Modal.Title>Select Date Range</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                          <h4>Start Date</h4>
+                  <Calendar
+                    value={fsdate1}
+                    onChange={(e) => {
+                      setfsDate1(e);
+                    }}
+                  />
+                  <h4>End Date</h4>
+                  <Calendar
+                    value={fedate1}
+                    minDate={fsdate1}
+                    onChange={(e) => {
+                      if (fsdate1 !== "") {
+                        setfeDate1(e);
+                      } else {
+                        alert("Please Select Start Date First .");
+                      }
+                    }}
+                  />  
+                                       <button onClick={handleApply} style={{backgroundColor: "#FF0000", color: "#FFFFFF", padding: "10px 20px", border: "none", borderRadius: "5px", cursor: "pointer"}}>apply</button>
+                              {/* <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /> */}
+                              {/* <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} /> */}
+                              {showDownloadButton && (
+        <button onClick={downloadCSV} style={{ backgroundColor: "#FF0000", color: "#FFFFFF", padding: "10px 20px", border: "none", borderRadius: "5px", cursor: "pointer", marginLeft: "13px" }}>
+          Download
+        </button>
+      )}  </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                              Close
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
                       </div>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6" style={{marginLeft:"-15px"}}>
+                    <div class="col-lg-2 col-md-4 col-sm-6" style={{ marginLeft: "-15px" }}>
                       <div class="card-d full-dark-blue ">
                         <div class="d-flex align-items-center justify-content-between mb-2">
                           <div class="d-svg">
@@ -742,7 +881,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6"  style={{marginLeft:"-15px"}}>
+                    <div class="col-lg-2 col-md-4 col-sm-6" style={{ marginLeft: "-15px" }}>
                       <div class="card-d full-purpel">
                         <div class="d-flex align-items-center justify-content-between mb-2">
                           <div class="d-svg">
@@ -792,7 +931,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6"  style={{marginLeft:"-15px"}}>
+                    <div class="col-lg-2 col-md-4 col-sm-6" style={{ marginLeft: "-15px" }}>
                       <div
                         class="card-d primery-blue"
                         onClick={async () => {
@@ -867,7 +1006,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6"  style={{marginLeft:"-15px"}}>
+                    <div class="col-lg-2 col-md-4 col-sm-6" style={{ marginLeft: "-15px" }}>
                       <div
                         class="card-d full-carret"
                         onClick={async () => {
@@ -935,7 +1074,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6"  style={{marginLeft:"-15px"}}>
+                    <div class="col-lg-2 col-md-4 col-sm-6" style={{ marginLeft: "-15px" }}>
                       <div
                         class="card-d perp-blue "
                         onClick={async () => {
@@ -1180,7 +1319,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div class="col-lg-10 col-md-12"  style={{marginLeft:"-15px"}}>
+                    <div class="col-lg-10 col-md-12" style={{ marginLeft: "-15px" }}>
                       <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                           <div class="d2-card">
@@ -1223,8 +1362,8 @@ const Dashboard = () => {
                             </div>
                             <div class="graph-svg">
                               {data &&
-                              data.getAdminCommissionGraph &&
-                              data.getAdminCommissionGraph.length !== 0 ? (
+                                data.getAdminCommissionGraph &&
+                                data.getAdminCommissionGraph.length !== 0 ? (
                                 <Area {...revenueconfig} height={160} />
                               ) : (
                                 <h5>No Data Found !</h5>
@@ -1253,7 +1392,7 @@ const Dashboard = () => {
                         </div> */}
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12"  style={{marginLeft:"-15px"}}>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12" style={{ marginLeft: "-15px" }}>
                           <div class="d2-card">
                             <div class="d-flex align-items-center gap-2">
                               <div>
@@ -1264,8 +1403,8 @@ const Dashboard = () => {
 
                             <div class="graph-svg">
                               {data &&
-                              data.getCanceledOrderGraph &&
-                              data.getCanceledOrderGraph.length !== 0 ? (
+                                data.getCanceledOrderGraph &&
+                                data.getCanceledOrderGraph.length !== 0 ? (
                                 <Area {...cancelconfig} height={160} />
                               ) : (
                                 <h5>No Data Found !</h5>
@@ -1295,7 +1434,7 @@ const Dashboard = () => {
                         </div> */}
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12" style={{marginLeft:"-15px"}}>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12" style={{ marginLeft: "-15px" }}>
                           <div class="d2-card">
                             <div class="d-flex align-items-center gap-2">
                               <div>
@@ -1305,8 +1444,8 @@ const Dashboard = () => {
                             </div>
                             <div class="graph-svg">
                               {data &&
-                              data.getCompleteOrderGraph &&
-                              data.getCompleteOrderGraph.length !== 0 ? (
+                                data.getCompleteOrderGraph &&
+                                data.getCompleteOrderGraph.length !== 0 ? (
                                 <Area {...completeconfig} height={160} />
                               ) : (
                                 <h5>No Data Found !</h5>
@@ -1345,8 +1484,8 @@ const Dashboard = () => {
                             </div>
                             <div class="graph-svg">
                               {data &&
-                              data.getDriverGraph &&
-                              data.getDriverGraph.length !== 0 ? (
+                                data.getDriverGraph &&
+                                data.getDriverGraph.length !== 0 ? (
                                 <Area {...dactiveconfig} height={160} />
                               ) : (
                                 <h5>No Data Found !</h5>
@@ -1375,7 +1514,7 @@ const Dashboard = () => {
                         </div> */}
                           </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12"style={{marginLeft:"-15px"}}>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12" style={{ marginLeft: "-15px" }}>
                           <div class="d2-card">
                             <div class="d-flex align-items-center gap-2">
                               <div>
@@ -1385,8 +1524,8 @@ const Dashboard = () => {
                             </div>
                             <div class="graph-svg">
                               {data &&
-                              data.getCustomerGraph &&
-                              data.getCustomerGraph.length !== 0 ? (
+                                data.getCustomerGraph &&
+                                data.getCustomerGraph.length !== 0 ? (
                                 <Area {...uactiveconfig} height={160} />
                               ) : (
                                 <h5>No Data Found !</h5>
@@ -1437,7 +1576,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-5" style={{marginLeft:"-15px"}}>
+                        <div className="col-lg-5" style={{ marginLeft: "-15px" }}>
                           <div className="d3-card pe-2">
                             <div>
                               <h5>Total Admin Commision</h5>
@@ -1450,7 +1589,7 @@ const Dashboard = () => {
                         </div>
                       </div>
 
-                      <div class="row"style={{marginLeft:"-15px"}}>
+                      <div class="row" style={{ marginLeft: "-15px" }}>
                         <div class="col-xl-7">
                           <div class="card pending">
                             <div class="card-body d-flex align-items-center gap-3">
@@ -1524,7 +1663,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                         </div>
-                        <div class="col-xl-5" style={{marginLeft:"-15px"}}>
+                        <div class="col-xl-5" style={{ marginLeft: "-15px" }}>
                           <div class="card active-orders">
                             <div class="card-body d-flex align-items-center gap-3">
                               <div class="">
@@ -1580,57 +1719,57 @@ const Dashboard = () => {
           </div>
           {/*  */}
           <div>
-      <style>{customStyles}</style>
-      <div
-        className="modal fade"
-        id="calendarModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Select Day</h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <Calendar
-                value={date}
-                onChange={(e) => setDate(e)}
-              />
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  if (date !== "") {
-                    setSelected("date");
-                    GetData2("date");
-                  }
-                }}
-                data-bs-dismiss="modal"
-              >
-                Save changes
-              </button>
+            <style>{customStyles}</style>
+            <div
+              className="modal fade"
+              id="calendarModal"
+              tabIndex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Select Day</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <Calendar
+                      value={date}
+                      onChange={(e) => setDate(e)}
+                    />
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        if (date !== "") {
+                          setSelected("date");
+                          GetData2("date");
+                        }
+                      }}
+                      data-bs-dismiss="modal"
+                    >
+                      Save changes
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
           {/*  */}
           <div
             class="modal fade"

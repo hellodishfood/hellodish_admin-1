@@ -214,7 +214,7 @@ function Restaurant() {
                     <h3 className="font-w700">Restaurants</h3>
                   </div>
                 </div>
-                <ul class="navbar-nav header-right" style={{marginLeft:"570px",marginTop:"20px"}}>
+                <ul class="navbar-nav header-right" style={{marginLeft:"870px",marginTop:"20px"}}>
                   <li class="nav-item">
                     <Link class="btn main_btn" to={"/AddRestaurant"}>
                       Add Restaurant

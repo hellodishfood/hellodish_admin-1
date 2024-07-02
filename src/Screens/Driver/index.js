@@ -200,7 +200,7 @@ function Driver() {
                     {/* <img src="images/dish.svg" /> */}
                     <h2 className="mb-0 me-auto">Drivers</h2>
                     <button
-                    style={{marginLeft:"700px"}}
+                    style={{marginLeft:"612%"}}
                         className="btn main_btn"
                         onClick={() => {
                           UpdateComission();

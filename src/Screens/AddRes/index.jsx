@@ -2088,9 +2088,9 @@ function AddRes() {
       <div className="footer">
         <div className="copyright">
           <p>
-            Copyright © Designed &amp; Developed by{" "}
+            Copyright © Designed &amp; Developed by {" "}
             <a href="#" target="_blank">
-              HelloDish
+              Hello Dish
             </a>{" "}
             2024
           </p>
