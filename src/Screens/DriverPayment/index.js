@@ -13,6 +13,7 @@ import Html2Pdf from "js-html2pdf";
 
 function Driverpayment() {
   const componentRef = useRef();
+  
   const location = useLocation();
   const data1 = location?.state?.data;
   const [data, setData] = useState([]);
@@ -50,25 +51,36 @@ function Driverpayment() {
     // "Date & Time"
 
   ];
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    onPrintError: (error) => console.log(error),
-    print: async (printIframe) => {
-      console.log(printIframe);
-      const document = printIframe.contentDocument;
-      if (document) {
-        const ticketElement = document.getElementsByClassName("ticket")[0];
-        ticketElement.style.display = "block";
-        const options = {
-          margin: 0,
-          filename: "ticket.pdf",
-          jsPDF: { unit: "px", format: [600, 800], orientation: "portrait" },
-        };
-        const exporter = new Html2Pdf(ticketElement, options);
-        await exporter.getPdf(options);
-      }
-    },
-  });
+  const tableRef = useRef();
+
+  const handlePrint = () => {
+    const printContents = tableRef.current.innerHTML;
+    const originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // To reload the page after printing
+  };
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  //   onPrintError: (error) => console.log(error),
+  //   print: async (printIframe) => {
+  //     console.log(printIframe);
+  //     const document = printIframe.contentDocument;
+  //     if (document) {
+  //       const ticketElement = document.getElementsByClassName("ticket")[0];
+  //       ticketElement.style.display = "block";
+  //       const options = {
+  //         margin: 0,
+  //         filename: "ticket.pdf",
+  //         jsPDF: { unit: "px", format: [600, 800], orientation: "portrait" },
+  //       };
+  //       const exporter = new Html2Pdf(ticketElement, options);
+  //       await exporter.getPdf(options);
+  //     }
+  //   },
+  // });
   const downloadCSV = () => {
     // Add "No" field to each item in jsonData
     const jsonDataWithNo = data.map((item, index) => (
@@ -387,6 +399,7 @@ function Driverpayment() {
                       Settelment
                     </a>
                   </div>
+                
                   <button
               style={{marginLeft:"-20 px",height:"40px",width:"100px",marginLeft:"78%"}}
                 type="button"
@@ -400,10 +413,19 @@ function Driverpayment() {
                 Download
               </button>
                 </div>
+                <button
+                style={{marginLeft:"80%"}}
+    type="button"
+    className="btn btn-primary me-3"
+    data-bs-dismiss="modal"
+    onClick={handlePrint}
+  >
+    Print
+  </button>
               </div>
             </div>
             {data.length !== 0 ? (
-              <div className="row">
+              <div className="row" ref={tableRef}>
                 <div className="col-xl-12">
                   <div className="table-responsive">
                     <table

@@ -7,6 +7,8 @@ import Restaurant from "./Screens/Restaurant";
 import RestaurantDetails from "./Screens/RestaurantDetails";
 import Menu from "./Screens/Menu";
 import Report from "./Screens/Report";
+import Reportrestront from "./Screens/Reportrestront";
+import Reportdetail from "./Screens/Reportdetail";
 import Driver from "./Screens/Driver";
 import DriverDetails from "./Screens/DriverDetails";
 import DriverAnalytics from "./Screens/DriverAnalytics";
@@ -42,6 +44,14 @@ const routes = [
   {
     path: "/Reports",
     element: Reports,
+  },
+  {
+    path: "/Reportdetail",
+    element: Reportdetail,
+  },
+  {
+    path: "/Reportrestront",
+    element: Reportrestront,
   },
   {
     path: "/Banner-promotions",

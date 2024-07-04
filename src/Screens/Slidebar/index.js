@@ -187,6 +187,136 @@ function Slidebar() {
               </span>
             </Link>
           </li>
+          
+          {/* <li>
+            <Link
+              to="/Reportdetail"
+              style={{
+                backgroundColor: selected === "Reportdetail" ? "#db1d1d" : "white",
+                borderRadius: 13,
+              }}
+              onClick={async () => {
+                await localStorage.setItem("stab", "Reportdetail");
+              }}
+            >
+              <i style={{ backgroundColor: "white" }}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={25}
+                  viewBox="0 0 24 25"
+                  fill="none"
+                >
+                  <path
+                    d="M3.01001 11.7202V16.2102C3.01001 20.7002 4.81001 22.5002 9.30001 22.5002H14.69C19.18 22.5002 20.98 20.7002 20.98 16.2102V11.7202"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 12.5C13.83 12.5 15.18 11.01 15 9.18L14.34 2.5H9.66999L8.99999 9.18C8.81999 11.01 10.17 12.5 12 12.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M18.31 12.5C20.33 12.5 21.81 10.86 21.61 8.85L21.33 6.1C20.97 3.5 19.97 2.5 17.35 2.5H14.3L15 9.51C15.17 11.16 16.66 12.5 18.31 12.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5.63988 12.5C7.28988 12.5 8.77988 11.16 8.93988 9.51L9.15988 7.3L9.63988 2.5H6.58988C3.96988 2.5 2.96988 3.5 2.60988 6.1L2.33988 8.85C2.13988 10.86 3.61988 12.5 5.63988 12.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 17.5C10.33 17.5 9.5 18.33 9.5 20V22.5H14.5V20C14.5 18.33 13.67 17.5 12 17.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </i>
+              <span
+                className="nav-text"
+                style={{ color: selected === "Reportdetail" ? "white" : "black" }}
+              >
+                Reportdetail
+              </span>
+            </Link>
+          </li> */}
+{/* 
+          <li>
+            <Link
+              to="/Reportrestront"
+              style={{
+                backgroundColor: selected === "Reportrestront" ? "#db1d1d" : "white",
+                borderRadius: 13,
+              }}
+              onClick={async () => {
+                await localStorage.setItem("stab", "Reportrestront");
+              }}
+            >
+              <i style={{ backgroundColor: "white" }}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={25}
+                  viewBox="0 0 24 25"
+                  fill="none"
+                >
+                  <path
+                    d="M3.01001 11.7202V16.2102C3.01001 20.7002 4.81001 22.5002 9.30001 22.5002H14.69C19.18 22.5002 20.98 20.7002 20.98 16.2102V11.7202"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 12.5C13.83 12.5 15.18 11.01 15 9.18L14.34 2.5H9.66999L8.99999 9.18C8.81999 11.01 10.17 12.5 12 12.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M18.31 12.5C20.33 12.5 21.81 10.86 21.61 8.85L21.33 6.1C20.97 3.5 19.97 2.5 17.35 2.5H14.3L15 9.51C15.17 11.16 16.66 12.5 18.31 12.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5.63988 12.5C7.28988 12.5 8.77988 11.16 8.93988 9.51L9.15988 7.3L9.63988 2.5H6.58988C3.96988 2.5 2.96988 3.5 2.60988 6.1L2.33988 8.85C2.13988 10.86 3.61988 12.5 5.63988 12.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 17.5C10.33 17.5 9.5 18.33 9.5 20V22.5H14.5V20C14.5 18.33 13.67 17.5 12 17.5Z"
+                    stroke="#db1d1d"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </i>
+              <span
+                className="nav-text"
+                style={{ color: selected === "Reportrestront" ? "white" : "black" }}
+              >
+                Reportrestront
+              </span>
+            </Link>
+          </li> */}
           <li>
             <Link
               to="/Menu"

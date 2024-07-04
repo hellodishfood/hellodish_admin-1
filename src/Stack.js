@@ -6,6 +6,8 @@ import RestaurantDetails from "./Screens/RestaurantDetails";
 import Menu from "./Screens/Menu";
 import MyComponent from "./Screens/Users";
 import Report from "./Screens/Report";
+import Reportrestront from "./Screens/Reportrestront";
+import Reportdetail from "./Screens/Reportdetail";
 import Driver from "./Screens/Driver";
 import DriverDetails from "./Screens/DriverDetails";
 import Login from "./Screens/Login";
@@ -29,6 +31,8 @@ function Stack() {
         <Route path="/RestaurantDetails" element={<RestaurantDetails />} />
         <Route path="/Menu" element={<Menu />} />
         <Route path="/Report" element={<Report />} />
+        <Route path="/Reportrestront/:id" element={<Reportrestront />} />
+        <Route path="/Reportdetail/:id"  element={<Reportdetail />} />
         <Route path="/Driver" element={<Driver />} />
         <Route path="/DriverDetails" element={<DriverDetails />} />
         <Route path="/DriverAnalytics" element={<DriverAnalytics />} />

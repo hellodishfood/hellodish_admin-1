@@ -5,6 +5,10 @@ import userEvent from "@testing-library/user-event";
 import { baseurl } from "../../Utilities/Api";
 import { useLocation, Link } from "react-router-dom";
 import Loader from "../Loader";
+import { useRef, forwardRef } from "react";
+import * as XLSX from "xlsx";
+
+
 
 function UserPayment() {
   const location = useLocation();
@@ -13,6 +17,27 @@ function UserPayment() {
   useEffect(() => {
     GetAllPayment();
   }, []);
+  const tableRef = useRef();
+
+  const handlePrint = () => {
+    const printContents = tableRef.current.innerHTML;
+    const originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // To reload the page after printing
+  };
+  const columnOrder1 = [
+    "No",
+    "orderID",
+    "transactionID",
+    "Food",
+    "Amount",
+    "Status",
+    "	Date & Time",
+  ];
+  const [selectedOption, setSelectedOption] = useState("users");
 
   const GetAllPayment = () => {
     setLoad(true);
@@ -53,6 +78,38 @@ function UserPayment() {
   const records = data.slice(firstIndex, lastIndex);
   const npage = Math.ceil(data.length / recordsPerPage);
   const numbers = [...Array(npage + 1).keys()].slice(1);
+  const downloadCSV = () => {
+    // Add "No" field to each item in jsonData
+    const jsonDataWithNo = data.map((item, index) => ({
+      No: index + 1, // Adding 1 to make it 1-based index
+      ...item,
+    }));
+
+    // Create a new array with the modified data
+    const newjsondata = jsonDataWithNo.map((element) => ({
+      ...element,
+      address: element.buildingNumber,
+    }));
+
+    // Convert JSON data to worksheet with specified columns only
+    const ws = XLSX.utils.json_to_sheet(newjsondata, {
+      header: selectedOption === "users" ? columnOrder1 : columnOrder1,
+    });
+
+    // Convert the worksheet to CSV
+    const csv = XLSX.utils.sheet_to_csv(ws, {
+      header: selectedOption === "users" ? columnOrder1 : columnOrder1,
+    });
+
+    // Create a blob from the CSV and download it
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `report.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const search = (val) => {
     if (val !== "") {
@@ -187,6 +244,25 @@ function UserPayment() {
               </div>
               <div className="col-lg-7 col-md-12 ">
                 <div className="row">
+                <div className="d-flex justify-content-end mt-3">
+  <button
+    type="button"
+    className="btn btn-primary me-3"
+    data-bs-dismiss="modal"
+    onClick={handlePrint}
+    style={{marginLeft:"550px"}}
+  >
+    Print
+  </button>
+  <button
+    type="button"
+    className="btn btn-primary"
+    data-bs-dismiss="modal"
+    onClick={downloadCSV}
+  >
+    Download
+  </button>
+</div>
                   {/* <div className="col-lg-4 col-md-4 col-12">
                     <div>
                       <p className="mb-0">
@@ -221,7 +297,7 @@ function UserPayment() {
               </div>
             </div>
             {data.length !== 0 ? (
-              <div className="row">
+              <div className="row">ref={tableRef}
                 <div className="col-xl-12">
                   <div className="table-responsive">
                     <table

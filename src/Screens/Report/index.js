@@ -2,166 +2,113 @@ import React, { useState, useEffect } from 'react';
 import Slidebar from "../Slidebar";
 import NavHeader from "../NavHeader";
 import { baseurl } from '../../Utilities/Api';
-import * as XLSX from "xlsx"
+import { Link } from "react-router-dom";
 
+import * as XLSX from "xlsx";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
 
 function Report() {
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState('users');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
 
-  useEffect(() => {
+  // const handleRedireact1 = (e,id) => {
+  //   console.log("_Id",id);
+  //   e.preventDefault();
+  //   navigate(`/Reportrestront#/Reportrestront/${id}`)
+  // }
 
-    const fetchData = async () => {
+  // const handleRedireact = (e,id) => {
+  //   console.log("_Id",id);
+  //   e.preventDefault();
+  //   navigate(`/Reportdetail#/Reportdetail/${id}`)
+  // }
+ 
+ 
+  const fetchData = async () => {
+    setLoading(true);
+    const token = 'your-token-here';
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
 
-      setLoading(true);
-
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YzIxZjk3M2Q3YWQzYjQ4YzU4NTliZiIsImlhdCI6MTcwOTAyNTcyMn0.ggOrgVeJylB3Lx4eB1_YqES9l5d5F5tyu1uFaQpqvHI';
-
-      const myHeaders = new Headers();
-
-      myHeaders.append("Authorization", `Bearer ${token}`);
-
-
-      let url = '';
-
-      if (selectedOption === 'users') {
-
+    let url = '';
+    if (selectedOption === 'users') {
+      if (startDate && endDate) {
+        const formattedStartDate = startDate.toISOString().split('T')[0];
+        const formattedEndDate = endDate.toISOString().split('T')[0];
+        url = `${baseurl}PaymentDetailsByUserId/66479bd9b30d627df5773ace?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      } else {
         url = `${baseurl}driver/api/driverlist`;
-
-      } else if (selectedOption === 'restaurants') {
-
+      }
+    } else if (selectedOption === 'restaurants') {
+      if (startDate && endDate) {
+        const formattedStartDate = startDate.toISOString().split('T')[0];
+        const formattedEndDate = endDate.toISOString().split('T')[0];
+        url = `${baseurl}PaymentDetailsByRestaurantId/6662ae17320305ee67f8408f?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      } else {
         url = `${baseurl}restaurant/api/restaurantlist`;
-
       }
+    }
 
-
-      const requestOptions = {
-
-        method: 'GET',
-
-        headers: myHeaders,
-
-        redirect: 'follow',
-
-      };
-
-
-      try {
-
-        const response = await fetch(url, requestOptions);
-
-
-        if (!response.ok) {
-
-          throw new Error(`HTTP error! status: ${response.status}`);
-
-        }
-
-
-        const result = await response.json();
-
-
-        console.log('Response:', response);
-
-        console.log('Result:', result);
-        if (selectedOption === 'users') {
-          setData(result.drivers || []);
-        } else {
-          setData(result.restaurants || []);
-        }
-
-
-
-        setError(null);
-
-      } catch (error) {
-
-        console.error('Error fetching data:', error);
-
-        setError(error);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
     };
 
+    try {
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setData(selectedOption === 'users' ? result.drivers || [] : result.restaurants || []);
+      setError(null);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    if ((selectedOption === 'users' && startDate && endDate) || (selectedOption === 'restaurants' && startDate && endDate) || selectedOption !== 'users') {
+      fetchData();
+    }
+  }, [selectedOption, startDate, endDate]);
 
-  }, [selectedOption]);
-
-  // const convertToCSV = (data) => {
-  //   // Implementation of the convertToCSV function
-  //   // Convert data array to CSV string
-  //   const csvRows = [];
-  //   const headers = Object.keys(data[0]);
-  //   csvRows.push(headers.join(','));
-  
-  //   for (const row of data) {
-  //     const values = headers.map(header => row[header]);
-  //     csvRows.push(values.join(','));
-  //   }
-  
-  //   return csvRows.join('\n');
-  // };
-  const columnOrder = [
-    "No",
-    "ownerName",
-    "restaurantName",
-    "restaurantAddress",
-    "phone",
-    // "totalAmount",
-    // "gstCharge",
-    // "deliveryCharge",
-    // "adminCommission",
-
-  ];
-
-  const columnOrder1 = [
-    "name",
-    "Phone",
-    "Email",
-    // "totalAmount",
-    // "gstCharge",
-    // "deliveryCharge",
-    // "adminCommission",
-  ]
-
-
-
+  const columnOrder = ["No", "ownerName", "restaurantName", "restaurantAddress", "phone"];
+  const columnOrder1 = ["name", "Phone", "Email"];
 
   const downloadCSV = () => {
-    
     const jsonDataWithNo = data.map((item, index) => ({
       No: index + 1, 
       ...item,
     }));
-var newjsondata = []
-jsonDataWithNo.forEach(element => {
-      element['address'] = element.buildingNumber;
-      newjsondata.push(element)
+    const newJsonData = jsonDataWithNo.map(item => ({
+      ...item,
+      address: item.buildingNumber,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(newJsonData, {
+      header: selectedOption === 'users' ? columnOrder1 : columnOrder,
     });
 
-    const ws = XLSX.utils.json_to_sheet(newjsondata, {
-      header: selectedOption === 'users' ? columnOrder1 :  columnOrder,
-    });
-  
-  
- 
     const csv = XLSX.utils.sheet_to_csv(ws, {
-      header: selectedOption === 'users' ? columnOrder1 :columnOrder,
+      header: selectedOption === 'users' ? columnOrder1 : columnOrder,
     });
-  
-    // Create a blob from the CSV and download it
+
     const blob = new Blob([csv], { type: "text/csv" }); 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -170,17 +117,6 @@ jsonDataWithNo.forEach(element => {
     a.click();
     URL.revokeObjectURL(url);
   };
-  
-  // const downloadCSV = () => {
-  //   const csvData = new Blob([convertToCSV(data)], { type: 'text/csv' });
-  //   const csvURL = URL.createObjectURL(csvData);
-  //   const link = document.createElement('a');
-  //   link.href = csvURL;
-  //   link.download = `report.csv`;
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // };
 
   return (
     <>
@@ -193,9 +129,7 @@ jsonDataWithNo.forEach(element => {
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-body">
-      {/* <button onClick={downloadCSV} style={{height:"40px",width:"70px", backgroundColor:"red"}}>download</button> */}
-      <button onClick={downloadCSV} style={{marginLeft:"90%"}} type="button" class="btn btn-primary mt-0 me-3"  data-bs-dismiss="modal" >Download</button>
-
+                    <button onClick={downloadCSV} style={{marginLeft:"90%"}} type="button" className="btn btn-primary mt-0 me-3">Download</button>
                     <h4 className="card-title">Report</h4>
                     <div className="form-group">
                       <label htmlFor="selectOption">Select Option</label>
@@ -209,6 +143,54 @@ jsonDataWithNo.forEach(element => {
                         <option value="restaurants">Restaurants</option>
                       </select>
                     </div>
+{/* 
+                    {selectedOption === 'users' && (
+                      <div className="form-group">
+                        <label>Select Start Date</label>
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          selectsStart
+                          startDate={startDate}
+                          endDate={endDate}
+                          className="form-control"
+                        />
+                        <label>Select End Date</label>
+                        <DatePicker
+                          selected={endDate}
+                          onChange={(date) => setEndDate(date)}
+                          selectsEnd
+                          startDate={startDate}
+                          endDate={endDate}
+                          minDate={startDate}
+                          className="form-control"
+                        />
+                      </div>
+                    )}
+
+                    {selectedOption === 'restaurants' && (
+                      <div className="form-group">
+                        <label>Select Start Date</label>
+                        <DatePicker
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          selectsStart
+                          startDate={startDate}
+                          endDate={endDate}
+                          className="form-control"
+                        />
+                        <label>Select End Date</label>
+                        <DatePicker
+                          selected={endDate}
+                          onChange={(date) => setEndDate(date)}
+                          selectsEnd
+                          startDate={startDate}
+                          endDate={endDate}
+                          minDate={startDate}
+                          className="form-control"
+                        />
+                      </div>
+                    )} */}
 
                     {loading ? (
                       <div>Loading...</div>
@@ -221,11 +203,7 @@ jsonDataWithNo.forEach(element => {
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                {/* <th>Total Amount</th>
-                                <th>Gst Charge</th>
-                                <th>Delivery Charge</th>
-                                <th>Admin Commission</th> */}
-                                {/* <th>Actions</th> */}
+                                <th>view</th>
                               </>
                             ) : (
                               <>
@@ -235,11 +213,7 @@ jsonDataWithNo.forEach(element => {
                                 <th>Restaurant Address</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                {/* <th>Total Amount</th>
-                                <th>Gst Charge</th>
-                                <th>Delivery Charge</th>
-                                <th>Admin Commission</th> */}
-                               
+                                <th>view</th>
                               </>
                             )}
                           </tr>
@@ -253,8 +227,27 @@ jsonDataWithNo.forEach(element => {
                                   <td>{item.name}</td>
                                   <td>{item.email}</td>
                                   {/* <td>
-                                    <button className="btn btn-primary">View</button>
-                                  </td> */}
+  <button
+    className="btn btn-primary"
+    onClick={(e) => handleRedireact1(e, item._id)}
+  >
+    <i className="fas fa-eye" /> 
+  </button>
+</td> */}
+<Link
+                                to="/Reportrestront"
+                                className="btn main_btn"
+                                state={{ data: item }}
+                              >
+                                 <button
+    className="btn btn-primary"
+    // onClick={(e) => handleRedireact1(e, item._id)}
+  >
+    <i className="fas fa-eye" /> 
+  </button>
+                        {/* <i className="fas fa-eye" />  */}
+                              </Link>
+
                                 </>
                               ) : (
                                 <>
@@ -263,6 +256,28 @@ jsonDataWithNo.forEach(element => {
                                   <td>{item.restaurantAddress}</td>
                                   <td>{item.email}</td>
                                   <td>{item.phone}</td>
+                                  {/* <td onClick={(e)=>handleRedireact(e,item._id)}> button</td> */}
+                                  <td>
+  {/* <button
+    className="btn btn-primary"
+    onClick={(e) => handleRedireact(e, item._id)}
+  >
+    <i className="fas fa-eye" /> 
+  </button> */}
+  <Link
+                                to="/Reportdetail"
+                                className="btn main_btn"
+                                state={{ data: item }}
+                              >
+                               <button
+    className="btn btn-primary"
+
+  >
+    <i className="fas fa-eye" /> 
+  </button> 
+                              </Link>
+
+</td>
                                 </>
                               )}
                             </tr>
