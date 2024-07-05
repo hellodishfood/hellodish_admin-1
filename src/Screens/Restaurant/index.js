@@ -214,7 +214,7 @@ function Restaurant() {
                     <h3 className="font-w700">Restaurants</h3>
                   </div>
                 </div>
-                <ul class="navbar-nav header-right" style={{marginLeft:"650px",marginTop:"20px"}}>
+                <ul class="navbar-nav header-right" style={{marginLeft:"680px",marginTop:"20px"}}>
                   <li class="nav-item">
                     <Link class="btn main_btn" to={"/AddRestaurant"}>
                       Add Restaurant
@@ -222,7 +222,7 @@ function Restaurant() {
                   </li>
                   </ul>
                 <button
-                style={{height:"40px",width:"80px",marginTop:"20px",marginRight:"200px"}}
+                style={{height:"40px",width:"80px",marginTop:"20px",marginRight:"100px"}}
                     type="button"
                     class="btn main_btn"
                     onClick={() => {

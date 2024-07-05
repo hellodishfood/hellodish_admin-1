@@ -26,7 +26,101 @@ function UserAnalytics() {
   useEffect(() => {
     GetAnalytic();
   }, []);
+  const customStyles = `
+  .modal-header {
+    background: #d32f2f;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 20px; /* Reduced padding */
+  }
 
+  .modal-title {
+    margin: 0;
+    font-size: 1.5rem; /* Reduced font size */
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-body {
+    padding: 15px; /* Reduced padding */
+    background-color: #f9f9f9;
+    border-radius: 5px; /* Reduced border radius */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-footer {
+    padding: 10px 20px; /* Reduced padding */
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-primary {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    color: white;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    font-size: 0.9rem; /* Reduced font size */
+    padding: 5px 10px; /* Reduced padding */
+    border-radius: 3px; /* Reduced border radius */
+  }
+
+  .btn-primary:hover {
+    background-color: #45a049;
+    
+    border-color: #45a049;
+  }
+
+  .btn-secondary {
+    background-color: #757575;
+    border-color: #757575;
+    color: white;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    font-size: 0.9rem; /* Reduced font size */
+    padding: 5px 10px; /* Reduced padding */
+    border-radius: 3px; /* Reduced border radius */
+  }
+
+  .btn-secondary:hover {
+    background-color: #616161;
+    border-color: #616161;
+  }
+
+  .react-calendar {
+    width: 90%; /* Reduced width */
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.125em;
+  }
+
+  .react-calendar__tile {
+    padding: 7px; /* Reduced padding */
+    background: #ffffff;
+    border-radius: 15px; /* Reduced border radius */
+    margin: 3px; /* Reduced margin */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px; /* Add gap between elements inside the tile */
+    font-size: 0.85rem; /* Reduced font size */
+  }
+
+  .react-calendar__tile--now {
+    background: #f57c00;
+    color: white;
+  }
+
+  .react-calendar__tile--active {
+    background: #4caf50;
+    color: white;
+  }
+
+  .react-calendar__tile--active:hover {
+    background: #45a049;
+  }
+`;
   const GetAnalytic = () => {
     setLoad(true);
     // const token = await localStorage.getItem("token");
@@ -180,6 +274,7 @@ function UserAnalytics() {
                     </div>
                   </div>
                 </div>
+                <style>{customStyles}</style>
                 <ul className="navbar-nav header-right">
                   <li className="nav-item">
                     <div className="card-action coin-tabs mt-3 mt-sm-0">

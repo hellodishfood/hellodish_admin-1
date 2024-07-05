@@ -190,6 +190,7 @@ const BannersPromotions = () => {
                 <div class="header-left">
                   <div class="banner_heading">
                     <h2>BANNER & PROMOTION</h2>
+                    
                   </div>
                 </div>
               </div>

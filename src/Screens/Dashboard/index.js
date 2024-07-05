@@ -181,19 +181,24 @@ const Dashboard = () => {
   //   link.click();
   // }
   const downloadCSV = () => {
-    const headers = Object.keys(downloadRang);
+    // Define startDate and endDate
+    const startDate = moment(fsdate1).format("YYYY-MM-DD"); // Replace with actual start date
+    const endDate = moment(fedate1).format("YYYY-MM-DD"); // Replace with actual end date
+    // moment(fsdate1).format("YYYY-MM-DD");
+    // moment(fsdate1).format("YYYY-MM-DD");
+    // Include startDate and endDate in headers and data
+    const headers = ["startDate", "endDate", ...Object.keys(downloadRang)];
     const csvContent = [
-      headers.join(','), // Add headers row
-      headers.map(header => downloadRang[header]).join(',') // Add data row
-    ].join('\n');
+      headers.join(","), // Add headers row
+      [startDate, endDate, ...Object.values(downloadRang)].join(","), // Add data row
+    ].join("\n");
   
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = 'data.csv';
+    link.download = "data.csv";
     link.click();
-  }
-  
+  };
   const handleClose = () => setOpen(false);
   const [week, setWeek] = useState([]);
   const [month, setMonth] = useState([]);

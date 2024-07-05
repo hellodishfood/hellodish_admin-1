@@ -8,12 +8,14 @@ import Loader from "../Loader";
 import * as XLSX from "xlsx"
 import { useRef, forwardRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import DatePicker from "react-datepicker";
 import Html2Pdf from "js-html2pdf";
 
 
 function Driverpayment() {
   const componentRef = useRef();
-  
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const location = useLocation();
   const data1 = location?.state?.data;
   const [data, setData] = useState([]);
@@ -255,6 +257,24 @@ function Driverpayment() {
                       <h2 className="mb-0 me-auto">{data1?.driver?.name}</h2>
                     </div>
                   </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginLeft:"700px"}}>
+  <button
+    type="button"
+    className="btn btn-primary me-3"
+    data-bs-dismiss="modal"
+    onClick={handlePrint}
+  >
+    Print
+  </button>
+  <button
+    type="button"
+    className="btn btn-primary ml-2"
+    data-bs-dismiss="modal"
+    onClick={downloadCSV}
+  >
+    Download
+  </button>
+</div>
                 </div>
                 <ul className="navbar-nav header-right"></ul>
               </div>
@@ -400,30 +420,45 @@ function Driverpayment() {
                     </a>
                   </div>
                 
-                  <button
-              style={{marginLeft:"-20 px",height:"40px",width:"100px",marginLeft:"78%"}}
-                type="button"
-                class="btn btn-primary mt-0 me-3"
-                data-bs-dismiss="modal"
-                onClick={downloadCSV}
-                  // onClick={() => {
-                  //   Add();
-                  // }}
-              >
-                Download
-              </button>
+               
                 </div>
-                <button
-                style={{marginLeft:"80%"}}
-    type="button"
-    className="btn btn-primary me-3"
-    data-bs-dismiss="modal"
-    onClick={handlePrint}
-  >
-    Print
-  </button>
+
               </div>
             </div>
+            <div className="form-group" style={{ marginLeft: "1%" }}>
+  <label>Select Start Date</label>
+  <DatePicker
+    selected={startDate}
+    onChange={(date) => setStartDate(date)}
+    selectsStart
+    startDate={startDate}
+    endDate={endDate}
+    className="form-control"
+    style={{
+      width: "175px", // set the width of the input field
+      padding: "10px", // add some padding to the input field
+      border: "1px solid #ccc", // change the border style
+      borderRadius: "5px", // add a border radius
+    }}
+  />
+  <label>Select End Date</label>
+  <DatePicker
+    selected={endDate}
+    onChange={(date) => setEndDate(date)}
+    selectsEnd
+    startDate={startDate}
+    endDate={endDate}
+    minDate={startDate}
+    className="form-control"
+    style={{
+      width: "175px", // set the width of the input field
+      padding: "10px", // add some padding to the input field
+      border: "1px solid #ccc", // change the border style
+      borderRadius: "5px", // add a border radius
+      marginLeft: "10px", // add some margin to the left
+    }}
+  />
+</div>
             {data.length !== 0 ? (
               <div className="row" ref={tableRef}>
                 <div className="col-xl-12">

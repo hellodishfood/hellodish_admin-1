@@ -85,6 +85,7 @@ function RestaurantPayment() {
     line-height: 1.125em;
   }
 
+
   .react-calendar__tile {
     padding: 7px; /* Reduced padding */
     background: #ffffff;
@@ -120,16 +121,20 @@ function RestaurantPayment() {
   }, []);
   const downloadCSV = () => {
     // Add "No" field to each item in jsonData
-    const jsonDataWithNo = data.map((item, index) => ({
-      No: index + 1, // Adding 1 to make it 1-based index
+    const jsonDataWithNo = data.map((item, index) => (
+      // console.log("itemitemitem",item),
+      {
+      // No: index + 1, // Adding 1 to make it 1-based index
       ...item,
     }));
     
     // Create a new array with the modified data
-    const newjsondata = jsonDataWithNo.map(element => ({
+    const newjsondata = jsonDataWithNo.map(element => (
+      {
       // ...element,
-      orderID:element.orderId,
-      address: element.buildingNumber,
+    orderID: element._id,
+      Amount:element.amount,
+      DateTime:element.createdAt,
     }));
   
     // Convert JSON data to worksheet with specified columns only
@@ -151,14 +156,15 @@ function RestaurantPayment() {
     a.click();
     URL.revokeObjectURL(url);
   };
+  
   const columnOrder1 = [
-    "No",
-    "orderID",
-    "transactionID",
-    "Food",
-    "Amount",
-    "Status",
-    "Date & Time"
+    // "No",
+    // "orderID",
+    // "transactionId",
+    // "Food",
+    // "amount",
+    // "status",
+    // "Date & Time"
 
   ];
   const GetAllPayment = () => {

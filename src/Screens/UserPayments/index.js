@@ -196,7 +196,28 @@ function UserPayment() {
                       )}
                       <h2 className="mb-0 me-auto">User Payment</h2>
                     </div>
+                    
                   </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginLeft:"100px"}}>
+
+  <button
+    type="button"
+    className="btn btn-primary me-3"  
+    data-bs-dismiss="modal"
+    onClick={handlePrint}
+    style={{marginLeft:"550px"}}
+  >
+    Print
+  </button>
+  <button
+    type="button"
+    className="btn btn-primary"
+    data-bs-dismiss="modal"
+    onClick={downloadCSV}
+  >
+    Download
+  </button>
+</div>
                 </div>
                 <ul className="navbar-nav header-right"></ul>
               </div>
@@ -244,25 +265,7 @@ function UserPayment() {
               </div>
               <div className="col-lg-7 col-md-12 ">
                 <div className="row">
-                <div className="d-flex justify-content-end mt-3">
-  <button
-    type="button"
-    className="btn btn-primary me-3"
-    data-bs-dismiss="modal"
-    onClick={handlePrint}
-    style={{marginLeft:"550px"}}
-  >
-    Print
-  </button>
-  <button
-    type="button"
-    className="btn btn-primary"
-    data-bs-dismiss="modal"
-    onClick={downloadCSV}
-  >
-    Download
-  </button>
-</div>
+              
                   {/* <div className="col-lg-4 col-md-4 col-12">
                     <div>
                       <p className="mb-0">
