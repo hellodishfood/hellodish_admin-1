@@ -8,8 +8,11 @@ import * as XLSX from "xlsx";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
-
+import { useLocation ,useParams} from 'react-router-dom';
 function Report() {
+  const { _id } = useParams();
+  const location = useLocation();
+  // const { data } = location.state;
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState('users');
   const [data, setData] = useState([]);
@@ -139,7 +142,7 @@ function Report() {
                         value={selectedOption}
                         onChange={handleOptionChange}
                       >
-                        <option value="users">Users</option>
+                        <option value="users">Driver</option>
                         <option value="restaurants">Restaurants</option>
                       </select>
                     </div>
@@ -236,11 +239,12 @@ function Report() {
 </td> */}
 <Link
                                 to="/Reportrestront"
+                                // to={`/Reportrestront/${item._id}`}
                                 className="btn main_btn"
                                 state={{ data: item }}
                               >
                                  <button
-    className="btn btn-primary"
+    className="btn "
     // onClick={(e) => handleRedireact1(e, item._id)}
   >
     <i className="fas fa-eye" /> 
@@ -264,18 +268,19 @@ function Report() {
   >
     <i className="fas fa-eye" /> 
   </button> */}
-  <Link
-                                to="/Reportdetail"
-                                className="btn main_btn"
-                                state={{ data: item }}
-                              >
-                               <button
-    className="btn btn-primary"
-
+<Link
+  to="/Reportdetail"
+  // to={`/Reportdetail/${item._id}`}
+  className="btn main_btn"
+  state={{ data: item }}
+>
+  <button
+    className="btn  btn-sm"
+   
   >
-    <i className="fas fa-eye" /> 
-  </button> 
-                              </Link>
+<i style={{ borderWidth: '1px' }} className="fas fa-eye" />
+  </button>
+</Link>
 
 </td>
                                 </>

@@ -11,11 +11,11 @@ function Reportdetail() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [data, setData] = useState({
-    restaurantPrice: 0,
-    deliveryCharge: 0,
-    adminCommission: 0,
-    gstPackingCharge: 0,
-    totalCost: 0
+    // restaurantPrice: 2,
+    // deliveryCharge: 2,
+    // adminCommission: 20,
+    // gstPackingCharge: 20,
+    // totalCost: 0
   }); // Initialize data state with default values
 
   useEffect(() => {
@@ -38,8 +38,9 @@ function Reportdetail() {
   async function fetchData() {
     const formattedStartDate = startDate.toISOString().split('T')[0];
     const formattedEndDate = endDate.toISOString().split('T')[0];
-    const url = `${baseurl}customer/api/PaymentDetailsByUserId/66854e5f3422402184d13f8f?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    const url = `${baseurl}customer/api/PaymentDetailsByUserId/${data?._Id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
     const response = await fetch(url, requestOptions);
+
 
     if (response.ok) {
       const responseData = await response.json();
