@@ -425,7 +425,7 @@ function Driverpayment() {
 
               </div>
             </div>
-            <div className="form-group" style={{ marginLeft: "1%" }}>
+            {/* <div className="form-group" style={{ marginLeft: "1%" }}>
   <label>Select Start Date</label>
   <DatePicker
     selected={startDate}
@@ -458,7 +458,7 @@ function Driverpayment() {
       marginLeft: "10px", // add some margin to the left
     }}
   />
-</div>
+</div> */}
             {data.length !== 0 ? (
               <div className="row" ref={tableRef}>
                 <div className="col-xl-12">
