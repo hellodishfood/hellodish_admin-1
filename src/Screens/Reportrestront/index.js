@@ -5,9 +5,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import Slidebar from "../Slidebar";
 import NavHeader from "../NavHeader";
 import { baseurl } from '../../Utilities/Api';
+import { useLocation } from 'react-router-dom';
 
 function Reportdetail() {
-  const { _Id } = useParams(); // Ensure the parameter name matches the route setup
+  const { _Id } = useParams(); 
+  const location = useLocation();
+  const { id } = location.state || {};
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [data, setData] = useState({
@@ -38,7 +41,7 @@ function Reportdetail() {
   async function fetchData() {
     const formattedStartDate = startDate.toISOString().split('T')[0];
     const formattedEndDate = endDate.toISOString().split('T')[0];
-    const url = `${baseurl}customer/api/PaymentDetailsByUserId/${data?._Id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    const url = `${baseurl}customer/api/PaymentDetailsByUserId/${id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
     const response = await fetch(url, requestOptions);
 
 

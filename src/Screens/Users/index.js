@@ -3,7 +3,8 @@ import Slidebar from "../Slidebar";
 import { Link } from "react-router-dom";
 import Loader from "../Loader";
 import { baseurl } from "../../Utilities/Api";
-
+import { Switch } from "@mui/material";
+import axios from "axios";
 const MyComponent = () => {
   useEffect(() => {
     GetAllCustomers();
@@ -27,6 +28,7 @@ const MyComponent = () => {
       .then((response) => response.json())
       .then((result) => {
         if (result.status == true) {
+          // setIsCodAvailable(result?.data.data.map((val=>val.isCodAvailble)));
           setData(result?.data);
           setoData(result?.data);
           console.log(result);
@@ -47,6 +49,7 @@ const MyComponent = () => {
   const recordsPerPage = 30;
   const lastIndex = currentpage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
+  const [isCodAvailable, setIsCodAvailable] = useState(true);
   const records = data.slice(firstIndex, lastIndex);
   const npage = Math.ceil(data.length / recordsPerPage);
   const numbers = [...Array(npage + 1).keys()].slice(1);
@@ -65,7 +68,24 @@ const MyComponent = () => {
       setData(odata);
     }
   };
-
+  const handleSwitchChange = async (event,_id) => {
+    const newValue = event.target.checked;
+    setIsCodAvailable(newValue);
+    console.log(newValue,"setIsCodAvailablesetIsCodAvailablesetIsCodAvailable");
+    
+    try {
+      const response = await axios.put(`https://api.hellodish.in/customer/api/updateUser/${_id}`, {
+        isCodAvailble: newValue
+      });
+      console.log('Responsejhgdghjhgdsdghgdsdghj:', response.data);
+      GetAllCustomers();
+      if (response.data.status) {
+        
+      }
+    } catch (error) {
+      console.error('Error updating COD availability:', error);
+    }
+  };
   return (
     <>
       {/********************
@@ -211,7 +231,13 @@ const MyComponent = () => {
                             {item?.name}
                           </h5>
                           <p className="mb-0">{item?.phone}</p>
+
                         </div>
+
+
+                        {/* <Switch style={{color:"red"}} defaultChecked   onChange={handleSwitchChange}/> */}
+                        <Switch checked={item?.isCodAvailble}  color="warning" onChange={(event) => handleSwitchChange(event, item._id)}/>
+
                         <div className="col-1"></div>
                         <div className="col-12 drivers-btn">
                           <button

@@ -120,9 +120,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import Slidebar from "../Slidebar";
 import NavHeader from "../NavHeader";
 import { baseurl } from '../../Utilities/Api';
+import { useLocation } from 'react-router-dom';
 
 function Reportdetail() {
-  const { _id } = useParams();
+  const location = useLocation();
+  const { id } = location.state || {};
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [data, setData] = useState({}); 
@@ -135,7 +137,7 @@ function Reportdetail() {
 
   const token = "your-token-here";
   const myHeaders = new Headers();
-  myHeaders.append("Authorization", `Bearer ${token}`);
+  myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YzIxZjk3M2Q3YWQzYjQ4YzU4NTliZiIsImlhdCI6MTcwOTAyNTcyMn0.ggOrgVeJylB3Lx4eB1_YqES9l5d5F5tyu1uFaQpqvHI");
 
   const requestOptions = {
     method: 'GET',
@@ -146,7 +148,8 @@ function Reportdetail() {
   async function fetchData() {
     const formattedStartDate = startDate.toISOString().split('T')[0];
     const formattedEndDate = endDate.toISOString().split('T')[0];
-    const url = `${baseurl}customer/api/PaymentDetailsByRestaurantId/${_id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    const url = `${baseurl}customer/api/PaymentDetailsByRestaurantId/${id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    console.log(url,"urlurl");
     const response = await fetch(url, requestOptions);
 
     if (response.ok) {

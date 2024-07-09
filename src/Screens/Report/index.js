@@ -467,7 +467,7 @@ function Report() {
                                     <Link
                                       to={`/Reportrestront`}
                                       className="btn main_btn"
-                                      state={{ data: item }}
+                                      state={{ data: item, id: item._id }}
                                     >
                                       <button className="btn">
                                         <i className="fas fa-eye" />
@@ -486,7 +486,8 @@ function Report() {
                                     <Link
                                       to={`/Reportdetail`}
                                       className="btn main_btn"
-                                      state={{ data: item }}
+                                      state={{ data: item, id: item._id }}
+
                                     >
                                       <button className="btn btn-sm">
                                         <i style={{ borderWidth: '1px' }} className="fas fa-eye" />
