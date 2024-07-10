@@ -11,6 +11,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from 'react-bootstrap';
 import { Area } from "@ant-design/plots";
 import moment from "moment"
+import * as XLSX from "xlsx"
 
 import Loader from "../Loader";
 import { useAuth } from "../../contexts/auth";
@@ -180,23 +181,28 @@ const Dashboard = () => {
   //   link.download = 'data.csv';
   //   link.click();
   // }
-  const downloadCSV = () => {
+  const downloadExcel = () => {
     // Define startDate and endDate
     const startDate = moment(fsdate1).format("YYYY-MM-DD"); // Replace with actual start date
     const endDate = moment(fedate1).format("YYYY-MM-DD"); // Replace with actual end date
-    // moment(fsdate1).format("YYYY-MM-DD");
-    // moment(fsdate1).format("YYYY-MM-DD");
+  
     // Include startDate and endDate in headers and data
     const headers = ["startDate", "endDate", ...Object.keys(downloadRang)];
-    const csvContent = [
-      headers.join(","), // Add headers row
-      [startDate, endDate, ...Object.values(downloadRang)].join(","), // Add data row
-    ].join("\n");
+    const data = [startDate, endDate, ...Object.values(downloadRang)];
   
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    // Create an Excel file using XLSX library
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet([headers, data]);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  
+    // Create a blob from the Excel file
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+    const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  
+    // Create a link to download the Excel file
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "data.csv";
+    link.download = "data.xlsx";
     link.click();
   };
   const handleClose = () => setOpen(false);
@@ -854,7 +860,7 @@ const Dashboard = () => {
                               {/* <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /> */}
                               {/* <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} /> */}
                               {showDownloadButton && (
-        <button onClick={downloadCSV} style={{ backgroundColor: "#FF0000", color: "#FFFFFF", padding: "10px 20px", border: "none", borderRadius: "5px", cursor: "pointer", marginLeft: "13px" }}>
+        <button onClick={downloadExcel} style={{ backgroundColor: "#FF0000", color: "#FFFFFF", padding: "10px 20px", border: "none", borderRadius: "5px", cursor: "pointer", marginLeft: "13px" }}>
           Download
         </button>
       )}  </Modal.Body>

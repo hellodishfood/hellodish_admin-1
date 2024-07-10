@@ -377,32 +377,35 @@ function Report() {
   const columnOrder = ["No", "ownerName", "restaurantName", "restaurantAddress", "phone"];
   const columnOrder1 = ["name", "Phone", "Email"];
 
-  const downloadCSV = () => {
+  const downloadExcel = () => {
     const jsonDataWithNo = data.map((item, index) => ({
       No: index + 1,
       ...item,
     }));
-    const newJsonData = jsonDataWithNo.map(item => ({
+  
+    const newJsonData = jsonDataWithNo.map((item) => ({
       ...item,
       address: item.buildingNumber,
     }));
-
+  
     const ws = XLSX.utils.json_to_sheet(newJsonData, {
-      header: selectedOption === 'users' ? columnOrder1 : columnOrder,
+      header: selectedOption === "users" ? columnOrder1 : columnOrder,
     });
-
-    const csv = XLSX.utils.sheet_to_csv(ws, {
-      header: selectedOption === 'users' ? columnOrder1 : columnOrder,
-    });
-
-    const blob = new Blob([csv], { type: "text/csv" });
+  
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Report");
+  
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  
+    const blob = new Blob([wbout], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `report.csv`;
+    a.download = `report.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
   };
+  
 
   return (
     <>
@@ -415,7 +418,7 @@ function Report() {
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-body">
-                    <button onClick={downloadCSV} style={{ marginLeft: "90%" }} type="button" className="btn btn-primary mt-0 me-3">Download</button>
+                    <button onClick={downloadExcel} style={{ marginLeft: "90%" }} type="button" className="btn btn-primary mt-0 me-3">Download</button>
                     <h4 className="card-title">Report</h4>
                     <div className="form-group">
                       <label htmlFor="selectOption">Select Option</label>

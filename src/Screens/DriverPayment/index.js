@@ -83,22 +83,19 @@ function Driverpayment() {
   //     }
   //   },
   // });
-  const downloadCSV = () => {
+  const downloadExcel = () => {
     // Add "No" field to each item in jsonData
-    const jsonDataWithNo = data.map((item, index) => (
-      // console.log("itemitemitem",item),
-      {
+    const jsonDataWithNo = data.map((item, index) => ({
       // No: index + 1, // Adding 1 to make it 1-based index
       ...item,
     }));
-    
+  
     // Create a new array with the modified data
-    const newjsondata = jsonDataWithNo.map(element => (
-      {
+    const newjsondata = jsonDataWithNo.map((element) => ({
       // ...element,
-    orderID: element._id,
-      Amount:element.amount,
-      DateTime:element.createdAt,
+      orderID: element._id,
+      Amount: element.amount,
+      DateTime: element.createdAt,
     }));
   
     // Convert JSON data to worksheet with specified columns only
@@ -106,17 +103,22 @@ function Driverpayment() {
       header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
     });
   
-    // Convert the worksheet to CSV
-    const csv = XLSX.utils.sheet_to_csv(ws, {
-      header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
+    // Create a workbook with the worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  
+    // Generate the Excel file
+    const excelBuffer = XLSX.write(wb, {
+      bookType: 'xlsx',
+      type: 'buffer',
     });
   
-    // Create a blob from the CSV and download it
-    const blob = new Blob([csv], { type: "text/csv" });
+    // Create a blob from the Excel file and download it
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `report.csv`;
+    a.download = `report.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -270,7 +272,7 @@ function Driverpayment() {
     type="button"
     className="btn btn-primary ml-2"
     data-bs-dismiss="modal"
-    onClick={downloadCSV}
+    onClick={downloadExcel}
   >
     Download
   </button>

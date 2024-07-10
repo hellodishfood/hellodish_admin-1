@@ -119,40 +119,40 @@ function RestaurantPayment() {
   useEffect(() => {
     GetAllPayment();
   }, []);
-  const downloadCSV = () => {
+  const downloadExcel = () => {
     // Add "No" field to each item in jsonData
-    const jsonDataWithNo = data.map((item, index) => (
-      // console.log("itemitemitem",item),
-      {
+    const jsonDataWithNo = data.map((item, index) => ({
       // No: index + 1, // Adding 1 to make it 1-based index
-      ...item,
+     ...item,
     }));
-    
+  
     // Create a new array with the modified data
-    const newjsondata = jsonDataWithNo.map(element => (
-      {
-      // ...element,
-    orderID: element._id,
-      Amount:element.amount,
-      DateTime:element.createdAt,
+    const newjsondata = jsonDataWithNo.map((element) => ({
+      //...element,
+      orderID: element._id,
+      Amount: element.amount,
+      DateTime: element.createdAt,
     }));
   
-    // Convert JSON data to worksheet with specified columns only
-    const ws = XLSX.utils.json_to_sheet(newjsondata, {
-      header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
+    // Create a workbook with a single worksheet
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(newjsondata, {
+      header: selectedOption === 'users'? columnOrder1 : columnOrder1,
     });
   
-    // Convert the worksheet to CSV
-    const csv = XLSX.utils.sheet_to_csv(ws, {
-      header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+  
+    // Create a blob from the workbook
+    const blob = new Blob([XLSX.write(workbook, { type: 'buffer' })], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
   
-    // Create a blob from the CSV and download it
-    const blob = new Blob([csv], { type: "text/csv" });
+    // Create a URL from the blob and download it
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `report.csv`;
+    a.download = `report.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -679,7 +679,7 @@ function RestaurantPayment() {
                 type="button"
                 class="btn btn-primary mt-0 me-3"
                 data-bs-dismiss="modal"
-                onClick={downloadCSV}
+                onClick={downloadExcel}
                   // onClick={() => {
                   //   Add();
                   // }}
