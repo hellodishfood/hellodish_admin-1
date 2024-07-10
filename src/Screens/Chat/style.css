@@ -46,7 +46,7 @@
   height: 614px;
   overflow-y: auto;
 }
-/ width /
+
 .support-chat .people-list ul::-webkit-scrollbar {
   width: 5px;
 }
@@ -64,7 +64,7 @@
   background: #888;
 }
 
-/ Handle on hover /
+
 .support-chat .people-list ul::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
