@@ -1305,6 +1305,25 @@ function DriverDetails() {
                               }}
                             ></div>
                           </div>
+                          {image?.selfie && (
+                              <button
+                                style={{
+                                  fontSize: "12px",
+                                  position: "absolute",
+                                  top: "7px", // Adjust as needed
+                                  left: "95px", // Adjust as needed
+                                }}
+                                onClick={() =>
+                                  handleDownload(image?.selfie)
+                                }
+                                className="btn btn-primary mt-2"
+                              >
+                                <i
+                                  className="fas fa-download"
+                                  style={{ fontSize: "12px" }}
+                                ></i>
+                              </button>
+                            )}
                         </div>
                       </div>
                     </div>

@@ -695,48 +695,49 @@ function Driverpayment() {
               ></button>
             </div>
             <div class="modal-body">
-              <div class="row add-menu-page">
-                <div class="col-lg-12 mx-auto">
-                  <div class="card">
-                    <div class="form-group">
-                      <label for="titel" class="">
-                        Amount
-                      </label>
-                      <input
-                        type="text"
-                        name="titel"
-                        id="titel"
-                        class="form-control"
-                        value={amt}
-                        onChange={(event) => {
-                          let val = event.target.value;
-                          if (val === "" || /^\d+$/.test(val)) {
-                            setAmt(val);
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                class="btn btn-primary mt-0 me-3"
-                data-bs-dismiss="modal"
-                onClick={() => {
-                  Add();
-                }}
-              >
-                Settelment
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-            </div>
+  <div class="row add-menu-page">
+    <div class="col-lg-12 mx-auto">
+      <div class="card">
+        <div class="form-group">
+          <label for="titel" class="">
+            Amount
+          </label>
+          <input
+            type="text"
+            name="titel"
+            id="titel"
+            class="form-control"
+            value={amt}
+            onChange={(event) => {
+              let val = event.target.value;
+              if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                setAmt(val);
+              }
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="btn btn-primary mt-0 me-3"
+    data-bs-dismiss="modal"
+    onClick={() => {
+      Add();
+    }}
+  >
+    Settlement
+  </button>
+  <button
+    type="button"
+    class="btn btn-secondary"
+    data-bs-dismiss="modal"
+  >
+    Cancel
+  </button>
+</div>
+
           </div>
         </div>
       </div>
