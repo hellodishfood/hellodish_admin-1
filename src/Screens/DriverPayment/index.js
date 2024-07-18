@@ -205,6 +205,45 @@ function Driverpayment() {
       });
   }
 
+
+  function Addd() {
+    setLoad(true);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append(
+      "Authorization",
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YzIxZjk3M2Q3YWQzYjQ4YzU4NTliZiIsImlhdCI6MTcwOTAyNTcyMn0.ggOrgVeJylB3Lx4eB1_YqES9l5d5F5tyu1uFaQpqvHI"
+    );
+
+    const raw = JSON.stringify({
+      type: "2",
+      id: data1?.driver?._id,
+      payment: Number(amt),
+    });
+
+    const requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`${baseurl}admin/api/updateWallet`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setLoad(false);
+        if (result.status == true) {
+          GetAllPayment();
+          setAmt("");
+        }
+      })
+      .catch((error) => {
+        setLoad(false);
+        console.error(error);
+      });
+  }
+
+
   return (
     <>
       {/********************
@@ -419,6 +458,16 @@ function Driverpayment() {
                       data-bs-target="#add-menu-box"
                     >
                       Settelment
+                    </a>
+                  </div>
+
+                  <div className="col-lg-3 col-md-4" style={{marginTop:"-30px"}}>
+                    <a
+                      className="btn main_btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#add-menu-box1"
+                    >
+                      Cod Settelment
                     </a>
                   </div>
                 
@@ -740,6 +789,81 @@ function Driverpayment() {
 
           </div>
         </div>
+
+
+
+        
+      </div>
+      <div
+        class="modal fade"
+        id="add-menu-box1"
+        tabindex="-1"
+        aria-labelledby="add-menu-boxLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog model-sm modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="add-menu-boxLabel">
+                <b>Settelment11</b>
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+  <div class="row add-menu-page">
+    <div class="col-lg-12 mx-auto">
+      <div class="card">
+        <div class="form-group">
+          <label for="titel" class="">
+            Amount
+          </label>
+          <input
+            type="text"
+            name="titel"
+            id="titel"
+            class="form-control"
+            value={amt}
+            onChange={(event) => {
+              let val = event.target.value;
+              if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                setAmt(val);
+              }
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="btn btn-primary mt-0 me-3"
+    data-bs-dismiss="modal"
+    onClick={() => {
+      Addd();
+    }}
+  >
+    Settlement
+  </button>
+  <button
+    type="button"
+    class="btn btn-secondary"
+    data-bs-dismiss="modal"
+  >
+    Cancel
+  </button>
+</div>
+
+          </div>
+        </div>
+
+
+
+        
       </div>
     </>
   );
