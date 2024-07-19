@@ -36,7 +36,7 @@ function Driverpayment() {
   useEffect(() => {
     GetAllPayment();
   }, []);
-  
+
   // const columnOrder1 = [
   //   "name",
   //   "Phone",
@@ -89,7 +89,7 @@ function Driverpayment() {
       // No: index + 1, // Adding 1 to make it 1-based index
       ...item,
     }));
-  
+
     // Create a new array with the modified data
     const newjsondata = jsonDataWithNo.map((element) => ({
       // ...element,
@@ -97,22 +97,22 @@ function Driverpayment() {
       Amount: element.amount,
       DateTime: element.createdAt,
     }));
-  
+
     // Convert JSON data to worksheet with specified columns only
     const ws = XLSX.utils.json_to_sheet(newjsondata, {
       header: selectedOption === 'users' ? columnOrder1 : columnOrder1,
     });
-  
+
     // Create a workbook with the worksheet
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  
+
     // Generate the Excel file
     const excelBuffer = XLSX.write(wb, {
       bookType: 'xlsx',
       type: 'buffer',
     });
-  
+
     // Create a blob from the Excel file and download it
     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = URL.createObjectURL(blob);
@@ -122,7 +122,7 @@ function Driverpayment() {
     a.click();
     URL.revokeObjectURL(url);
   };
-  
+
   const GetAllPayment = () => {
     setLoad(true);
     const myHeaders = new Headers();
@@ -298,24 +298,24 @@ function Driverpayment() {
                       <h2 className="mb-0 me-auto">{data1?.driver?.name}</h2>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginLeft:"700px"}}>
-  <button
-    type="button"
-    className="btn btn-primary me-3"
-    data-bs-dismiss="modal"
-    onClick={handlePrint}
-  >
-    Print
-  </button>
-  <button
-    type="button"
-    className="btn btn-primary ml-2"
-    data-bs-dismiss="modal"
-    onClick={downloadExcel}
-  >
-    Download
-  </button>
-</div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginLeft: "700px" }}>
+                    <button
+                      type="button"
+                      className="btn btn-primary me-3"
+                      data-bs-dismiss="modal"
+                      onClick={handlePrint}
+                    >
+                      Print
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary ml-2"
+                      data-bs-dismiss="modal"
+                      onClick={downloadExcel}
+                    >
+                      Download
+                    </button>
+                  </div>
                 </div>
                 <ul className="navbar-nav header-right"></ul>
               </div>
@@ -403,7 +403,7 @@ function Driverpayment() {
                       </h2>
                     </div>
                   </div>
-                  
+
                   <div className="col-lg-4 col-md-4">
                     <div>
                       <p className="mb-0">
@@ -427,10 +427,19 @@ function Driverpayment() {
               >
                 Print
               </button> */}
-            
+
                 <div className="row">
                   <div className="col-lg-3 d-none d-lg-block"></div>
-
+                  <div className="col-lg-3 col-md-4">
+                    <div>
+                      <p className="mb-0">
+                        <b>Cod Amount</b>
+                      </p>
+                      <h2>
+                        <b>₹ {wallet?.codAmount?.toFixed(2)}</b>
+                      </h2>
+                    </div>
+                  </div>
                   <div className="col-lg-3 col-md-4">
                     <div>
                       <p className="mb-0">
@@ -451,27 +460,39 @@ function Driverpayment() {
                       </h2>
                     </div>
                   </div>
-                  <div className="col-lg-3 col-md-4">
-                    <a
-                      className="btn main_btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#add-menu-box"
-                    >
-                      Settelment
-                    </a>
-                  </div>
 
-                  <div className="col-lg-3 col-md-4" style={{marginTop:"-30px"}}>
-                    <a
-                      className="btn main_btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#add-menu-box1"
-                    >
-                      Cod Settelment
-                    </a>
-                  </div>
-                
-               
+
+
+
+                  <div className="col-lg-8" style={{ marginTop: "10px" }}>
+                      <a
+    className="btn main_btn"
+    data-bs-toggle="modal"
+    data-bs-target="#add-menu-box"
+    style={{ float: "right", marginLeft: "20px" }}
+  >
+    Settelment
+  </a>
+  <a
+    className="btn main_btn"
+    data-bs-toggle="modal"
+    data-bs-target="#add-menu-box1"
+    style={{ float: "right" }}
+  >
+    Cod Settelment
+  </a>
+  {/* <a
+    className="btn main_btn"
+    data-bs-toggle="modal"
+    data-bs-target="#add-menu-box"
+    style={{ float: "right", marginLeft: "20px" }}
+  >
+    Settelment
+  </a> */}
+</div>
+
+
+
                 </div>
 
               </div>
@@ -652,9 +673,8 @@ function Driverpayment() {
                 </li>
                 {numbers.map((num) => (
                   <li
-                    className={`page-item ${
-                      currentpage === num ? "active" : ""
-                    }`}
+                    className={`page-item ${currentpage === num ? "active" : ""
+                      }`}
                   >
                     <span
                       className="page-link"
@@ -744,55 +764,62 @@ function Driverpayment() {
               ></button>
             </div>
             <div class="modal-body">
-  <div class="row add-menu-page">
-    <div class="col-lg-12 mx-auto">
-      <div class="card">
-        <div class="form-group">
-          <label for="titel" class="">
-            Amount
-          </label>
-          <input
-            type="text"
-            name="titel"
-            id="titel"
-            class="form-control"
-            value={amt}
-            onChange={(event) => {
-              let val = event.target.value;
-              if (val === "" || /^\d*\.?\d*$/.test(val)) {
-                setAmt(val);
-              }
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-  <button
-    type="button"
-    class="btn btn-primary mt-0 me-3"
-    data-bs-dismiss="modal"
-    onClick={() => {
-      Add();
-    }}
-  >
-    Settlement
-  </button>
-  <button
-    type="button"
-    class="btn btn-secondary"
-    data-bs-dismiss="modal"
-  >
-    Cancel
-  </button>
-</div>
+              <div class="row add-menu-page">
+                <div class="col-lg-12 mx-auto">
+                  <div class="card">
+                    <div class="form-group">
+                      <label for="titel" class="">
+                        Amount
+                      </label>
+                      <input
+                        type="text"
+                        name="titel"
+                        id="titel"
+                        class="form-control"
+                        value={amt}
+                        onChange={(event) => {
+                          let val = event.target.value;
+                          if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                            setAmt(val);
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary mt-0 me-3"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  Add();
+                  if (amt !== 0) {
+                    Add();
+                  } else {
+                    console.log('AddAddAdddADdd', Add);
+                  }
+
+                }}
+
+              >
+                Settlement
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
 
           </div>
         </div>
 
 
 
-        
+
       </div>
       <div
         class="modal fade"
@@ -815,55 +842,61 @@ function Driverpayment() {
               ></button>
             </div>
             <div class="modal-body">
-  <div class="row add-menu-page">
-    <div class="col-lg-12 mx-auto">
-      <div class="card">
-        <div class="form-group">
-          <label for="titel" class="">
-            Amount
-          </label>
-          <input
-            type="text"
-            name="titel"
-            id="titel"
-            class="form-control"
-            value={amt}
-            onChange={(event) => {
-              let val = event.target.value;
-              if (val === "" || /^\d*\.?\d*$/.test(val)) {
-                setAmt(val);
-              }
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-  <button
-    type="button"
-    class="btn btn-primary mt-0 me-3"
-    data-bs-dismiss="modal"
-    onClick={() => {
-      Addd();
-    }}
-  >
-    Settlement
-  </button>
-  <button
-    type="button"
-    class="btn btn-secondary"
-    data-bs-dismiss="modal"
-  >
-    Cancel
-  </button>
-</div>
+              <div class="row add-menu-page">
+                <div class="col-lg-12 mx-auto">
+                  <div class="card">
+                    <div class="form-group">
+                      <label for="titel" class="">
+                        Amount
+                      </label>
+                      <input
+                        type="text"
+                        name="titel"
+                        id="titel"
+                        class="form-control"
+                        value={amt}
+                        onChange={(event) => {
+                          let val = event.target.value;
+                          if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                            let amount = parseFloat(val);
+                            const codAmount = wallet?.codAmount;
+                      
+                            // Ensure amount does not exceed codAmount
+                            if (isNaN(amount) || amount <= codAmount) {
+                              setAmt(val);
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary mt-0 me-3"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  Addd();
+                }}
+              >
+                Settlement
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
 
           </div>
         </div>
 
 
 
-        
+
       </div>
     </>
   );
