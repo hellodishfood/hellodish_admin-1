@@ -805,7 +805,7 @@ function Driverpayment() {
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="add-menu-boxLabel">
-                <b>Settelment11</b>
+                <b>Settelment</b>
               </h5>
               <button
                 type="button"
