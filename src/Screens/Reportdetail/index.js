@@ -30,10 +30,15 @@ function Reportdetail() {
     headers: myHeaders,
     redirect: 'follow',
   };
+  const adjustDateToLocalTimezone = (date) => {
+    const offsetInMinutes = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - offsetInMinutes * 60000);
+    return adjustedDate.toISOString().split('T')[0];
+  };
 
   async function fetchData() {
-    const formattedStartDate = startDate.toISOString().split('T')[0];
-    const formattedEndDate = endDate.toISOString().split('T')[0];
+    const formattedStartDate = adjustDateToLocalTimezone(startDate);
+    const formattedEndDate = adjustDateToLocalTimezone(endDate);
     const url = `${baseurl}customer/api/PaymentDetailsByRestaurantId/${id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
     console.log(url,"urlurl");
     const response = await fetch(url, requestOptions);
