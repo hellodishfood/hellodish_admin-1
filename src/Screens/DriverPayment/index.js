@@ -465,23 +465,23 @@ function Driverpayment() {
 
 
                   <div className="col-lg-8" style={{ marginTop: "10px" }}>
-                      <a
-    className="btn main_btn"
-    data-bs-toggle="modal"
-    data-bs-target="#add-menu-box"
-    style={{ float: "right", marginLeft: "20px" }}
-  >
-    Settelment
-  </a>
-  <a
-    className="btn main_btn"
-    data-bs-toggle="modal"
-    data-bs-target="#add-menu-box1"
-    style={{ float: "right" }}
-  >
-    Cod Settelment
-  </a>
-  {/* <a
+                    <a
+                      className="btn main_btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#add-menu-box"
+                      style={{ float: "right", marginLeft: "20px" }}
+                    >
+                      Settelment
+                    </a>
+                    <a
+                      className="btn main_btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#add-menu-box1"
+                      style={{ float: "right" }}
+                    >
+                      Cod Settelment
+                    </a>
+                    {/* <a
     className="btn main_btn"
     data-bs-toggle="modal"
     data-bs-target="#add-menu-box"
@@ -489,7 +489,7 @@ function Driverpayment() {
   >
     Settelment
   </a> */}
-</div>
+                  </div>
 
 
 
@@ -860,7 +860,7 @@ function Driverpayment() {
                           if (val === "" || /^\d*\.?\d*$/.test(val)) {
                             let amount = parseFloat(val);
                             const codAmount = wallet?.codAmount;
-                      
+
                             // Ensure amount does not exceed codAmount
                             if (isNaN(amount) || amount <= codAmount) {
                               setAmt(val);

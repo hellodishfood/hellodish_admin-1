@@ -703,7 +703,7 @@ function RestaurantPayment() {
                           <th>Amount</th>
                           <th>Status</th>
                           <th>Date &amp; Time</th>
-                          <th>action</th>
+                          {/* <th>action</th> */}
                           <th />
                         </tr>
                       </thead>
@@ -777,9 +777,7 @@ function RestaurantPayment() {
                             
                           </td>
                           */}
-                          <td>
-                            download
-                          </td>
+                        
                           </tr>
                           
                         ))}

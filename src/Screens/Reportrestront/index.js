@@ -13,16 +13,10 @@ function Reportdetail() {
   const { id } = location.state || {};
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [data, setData] = useState({
-    // restaurantPrice: 2,
-    // deliveryCharge: 2,
-    // adminCommission: 20,
-    // gstPackingCharge: 20,
-    // totalCost: 0
-  }); // Initialize data state with default values
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    if (startDate && endDate) { // Only fetch data when both start and end dates are selected
+    if (startDate && endDate) {
       fetchData();
     }
   }, [startDate, endDate]);
@@ -38,12 +32,19 @@ function Reportdetail() {
     redirect: 'follow',
   };
 
-  async function fetchData() {
-    const formattedStartDate = startDate.toISOString().split('T')[0];
-    const formattedEndDate = endDate.toISOString().split('T')[0];
-    const url = `${baseurl}customer/api/PaymentDetailsByUserId/${id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
-    const response = await fetch(url, requestOptions);
+  const adjustDateToLocalTimezone = (date) => {
+    const offsetInMinutes = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - offsetInMinutes * 60000);
+    return adjustedDate.toISOString().split('T')[0];
+  };
 
+  async function fetchData() {
+    const formattedStartDate = adjustDateToLocalTimezone(startDate);
+    const formattedEndDate = adjustDateToLocalTimezone(endDate);
+    console.log(formattedStartDate,"formattedStartDate");
+    console.log(formattedEndDate,"formattedEndDate");
+    const url = `${baseurl}driver/api/DriverPayFlow/${id}?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    const response = await fetch(url, requestOptions);
 
     if (response.ok) {
       const responseData = await response.json();
@@ -85,30 +86,26 @@ function Reportdetail() {
         />
       </div>
 
-      {startDate && endDate && (
-         <div className="card" style={{ width: "80%", marginLeft: "20%" }}>
-    <div className="card-body">
-    <table className="table table-bordered table-responsive">
-          <thead>
-            <tr>
-              <th>Order Price</th>
-              <th>Delivery Charge</th>
-              <th>Admin Commission</th>
-              <th>GST Packing Charge</th>
-              <th>Total Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{data.restaurantPrice}</td>
-              <td>{data.deliveryCharge}</td>
-              <td>{data.adminCommission}</td>
-              <td>{data.gstPackingCharge}</td>
-              <td>{data.totalCost}</td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
+      {startDate && endDate && data.payments && (
+        <div className="card" style={{ width: "80%", marginLeft: "20%" }}>
+          <div className="card-body">
+            <table className="table table-bordered table-responsive">
+              <thead>
+                <tr>
+                  <th>Created At</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.payments.map((payment, index) => (
+                  <tr key={index}>
+                    <td>{new Date(payment.createdAt).toLocaleString()}</td>
+                    <td>{payment.amount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
