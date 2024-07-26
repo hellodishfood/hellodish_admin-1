@@ -34,7 +34,7 @@ import Profile from "./Screens/Profile";
 import Restrontpolicy from "./Screens/Restrontpolicy";
 import Userorder from "./Screens/Userorder";
 import Pickupdeleary from "./Screens/Pickupdeleary";
-import PrivacyPolicy from "./Screens/PrivacyPolicy";
+import PrivacyPolicy from "./Screens/Privicy";
 
 const routes = [
   // {
