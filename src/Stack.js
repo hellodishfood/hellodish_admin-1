@@ -20,6 +20,10 @@ import BannersPromotions from "./Screens/Banners&Promotions";
 import Dashboard from "./Screens/Dashboard";
 import Reports from "./Screens/Reports";
 import UserOrders from "./Screens/UserOrders";
+import Restrontpolicy from "./Screens/Restrontpolicy";
+import Userorder from "./Screens/Userorder";
+import Pickupdeleary from "./Screens/Pickupdeleary";
+import PrivacyPolicy from "./Screens/PrivacyPolicy";
 
 function Stack() {
   return (
@@ -35,12 +39,16 @@ function Stack() {
         <Route path="/Reportdetail/:id"  element={<Reportdetail />} />
         <Route path="/Driver" element={<Driver />} />
         <Route path="/DriverDetails" element={<DriverDetails />} />
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/Pickupdeleary" element={<Pickupdeleary />} />
+        <Route path="/Restrontpolicy" element={<Restrontpolicy />} />
         <Route path="/DriverAnalytics" element={<DriverAnalytics />} />
         <Route path="/DriverPayment" element={<Driverpayment />} />
         <Route path="/RestaurantOrders" element={<RestaurantOrders />} />
         <Route path="/OrderDetail" element={<OrderDetail />} />
         <Route path="/BannersPromotions" element={<BannersPromotions />} />
         <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/Userorder" element={<Userorder />} />
 
         <Route path="/Users" element={<MyComponent />} />
         <Route path="/UserOrders" element={<UserOrders />} />

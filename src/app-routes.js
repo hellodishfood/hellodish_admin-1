@@ -31,6 +31,10 @@ import PolicySupport from "./Screens/PolicySupport";
 import Chat from "./Screens/Chat";
 import AddRes from "./Screens/AddRes";
 import Profile from "./Screens/Profile";
+import Restrontpolicy from "./Screens/Restrontpolicy";
+import Userorder from "./Screens/Userorder";
+import Pickupdeleary from "./Screens/Pickupdeleary";
+import PrivacyPolicy from "./Screens/PrivacyPolicy";
 
 const routes = [
   // {
@@ -40,6 +44,22 @@ const routes = [
   {
     path: "/Dashboard",
     element: Dashboard,
+  },
+  {
+    path: "/Restrontpolicy",
+    element: Restrontpolicy,
+  },
+  {
+    path: "/PrivacyPolicy",
+    element: PrivacyPolicy,
+  },
+  {
+    path: "/Userorder",
+    element: Userorder,
+  },
+  {
+    path: "/Pickupdeleary",
+    element: Pickupdeleary,
   },
   {
     path: "/Reports",
