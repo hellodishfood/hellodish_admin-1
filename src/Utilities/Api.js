@@ -1,11 +1,12 @@
 // export const Baseurl = "https://api.hellodish.in/restaurant/api/";
 // export const baseurl = "https://api.hellodish.in/";
 
-export const Baseurl = "https://api.hellodish.in/restaurant/api/";
+//export const Baseurl = "https://api.hellodish.in/restaurant/api/";
+export const Baseurl = "https://rdemo.ecommercesourcecode.com/dish/restaurant/api/";
 // export const baseurl = "https://50fd-2409-40e5-1004-1652-cd8-e91c-459a-edf1.ngrok-free.app/";
 // export const baseurl = "https://api.hellodish.in/";
-export const baseurl = "https://api.hellodish.in/";
-
+//export const baseurl = "https://api.hellodish.in/";
+export const baseurl = "https://rdemo.ecommercesourcecode.com/dish/";
 
 
 export const token = localStorage.getItem("authToken");

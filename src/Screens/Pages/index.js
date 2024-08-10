@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import Slidebar from "../Slidebar";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../../api/auth";
 import Loader from "../Loader";
 
 const MyComponent = () => {
@@ -22,7 +23,7 @@ const MyComponent = () => {
 			redirect: "follow",
 		};
 
-		fetch("https://api.hellodish.in/admin/api/getCustomers", requestOptions)
+		fetch(`${baseUrl}admin/api/getCustomers`, requestOptions)
 			.then((response) => response.json())
 			.then((result) => {
 				if (result.status == true) {
