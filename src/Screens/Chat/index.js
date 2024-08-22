@@ -19,6 +19,7 @@ function Chat() {
   useEffect(() => {
     GetChats();
   }, []);
+  
 
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);

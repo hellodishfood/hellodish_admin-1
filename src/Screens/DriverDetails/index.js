@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import Slidebar from "../Slidebar";
 import { useFormik } from "formik";
-import { baseUrl } from "../../api/auth"
+import { baseurl } from "../../Utilities/Api";
 import { useHelloDishApp } from "../../contexts/HelloDishAppProvider";
 import Loader from "../Loader";
 import axios from "axios";
@@ -28,7 +28,8 @@ function DriverDetails() {
   console.log(data, "data-+-+-+-+-+-+-+-+");
   const documentData = data?.documentDetails;
 
-  
+  console.log(documentData, "documentData");
+  const baseUrl = "https://api.hellodish.in/";
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = (image) => {
