@@ -66,7 +66,7 @@ const BannersPromotions = () => {
       };
 
       const response = await fetch(
-        `${baseurl}driver/api/uploadImage`,
+        `https://api.hellodish.in/driver/api/uploadImage`,
         requestOptions
       );
       const result = await response.json();

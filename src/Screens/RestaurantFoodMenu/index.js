@@ -73,7 +73,7 @@ function RestaurantFoodMenu() {
       subCategoryId: formik.values.scat,
       active: omeal?.active,
     });
-    console.log("row s, item",raw)
+
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
@@ -116,8 +116,6 @@ function RestaurantFoodMenu() {
       subCategoryId: formik.values.scat,
       active: active,
     });
-
-    console.log("row, item",raw)
 
     const requestOptions = {
       method: "PUT",
@@ -270,7 +268,6 @@ function RestaurantFoodMenu() {
             ...meal,
             state: false,
           }));
-          console.log("resurant d",modifiedMeals)
           setMeals(modifiedMeals);
         }
       })
@@ -281,16 +278,16 @@ function RestaurantFoodMenu() {
   }
 
   function SetValues(data) {
-    console.log("dd",data?.subCategoryId);
+    console.log(data?.categoryId);
     formik.setFieldValue("title", data?.name);
     formik.setFieldValue("price", data?.price);
     formik.setFieldValue("image", data?.image);
     formik.setFieldValue("time", data?.takingTime);
     formik.setFieldValue("quantity", data?.quantity_type);
     formik.setFieldValue("veg", data?.vegNonVeg);
-    formik.setFieldValue("cat", data?.mealId);
-    formik.setFieldValue("scat", data?.subCategoryId);
-    formik.setFieldValue("catt", data?.categoryId);
+    formik.setFieldValue("cat", data?.mealId._id);
+    formik.setFieldValue("scat", data?.subCategoryId._id);
+    formik.setFieldValue("catt", data?.categoryId._id);
   }
 
   function Delete() {
@@ -562,7 +559,6 @@ function RestaurantFoodMenu() {
                             //   data-bs-target="#collapseOne"
                             //   aria-expanded={item.state}
                             //   aria-controls="collapseOne"
-                            onChange={()=>{}}
                             onClick={() => {
                               setMeals((prevMeals) =>
                                 prevMeals.map((meal) => {
@@ -573,7 +569,6 @@ function RestaurantFoodMenu() {
                                   }
                                 })
                               );
-                            
                               setoMeal(item.items[0]);
                               SetValues(item.items[0]);
                             }}
@@ -935,18 +930,11 @@ function RestaurantFoodMenu() {
                                               checked={
                                                 c._id === formik.values.catt
                                               }
-                                              onClick={() => {
-                                                if(formik.values.catt== c._id){
-                                                  formik.setFieldValue(
-                                                    "catt",
-                                                    ""
-                                                  );
-                                                }else{
-                                                  formik.setFieldValue(
-                                                    "catt",
-                                                    c._id
-                                                  );
-                                                }
+                                              onChange={() => {
+                                                formik.setFieldValue(
+                                                  "catt",
+                                                  c._id
+                                                );
                                               }}
                                             />
                                             <label class="mb-0" for="">

@@ -25,7 +25,7 @@ const MyComponent = () => {
       redirect: "follow",
     };
 
-    fetch(`${baseurl}admin/api/getCustomers`, requestOptions)
+    fetch("https://api.hellodish.in/admin/api/getCustomers", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result.status == true) {
@@ -75,7 +75,7 @@ const MyComponent = () => {
     console.log(newValue, "setIsCodAvailablesetIsCodAvailablesetIsCodAvailable");
 
     try {
-      const response = await axios.put(`$${baseurl}customer/api/updateUser/${_id}`, {
+      const response = await axios.put(`https://api.hellodish.in/customer/api/updateUser/${_id}`, {
         isCodAvailble: newValue
       });
       console.log('Responsejhgdghjhgdsdghgdsdghj:', response.data);
