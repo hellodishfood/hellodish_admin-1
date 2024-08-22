@@ -1,5 +1,5 @@
-
-const baseURL = "https://api.hellodish.in/";
+import { baseUrl } from "./auth";
+//const baseURL = "https://api.hellodish.in/";
 
 export async function GetList_Data(url) {
 
@@ -14,7 +14,7 @@ export async function GetList_Data(url) {
             },
             redirect: "follow"
         }
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
         let GetListResponse = await data.json()
         return {
             isOk: true,
@@ -44,7 +44,7 @@ export async function Delete_Data(url) {
                 'Authorization': `Bearer ${localStorage.getItem("authToken")}`, // notice the Bearer before your token
             }
         }
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
 
         if (data.status === 200) {
             return {
@@ -84,7 +84,7 @@ export async function Activate_Agent(url, dataObj) {
             ,
             body: JSON.stringify(dataObj)
         }
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
         if (!data.ok) {
             return {
                 isOk: data.ok,
@@ -121,7 +121,7 @@ export async function UpdateStatusApproveAndReject(url) {
                 'Authorization': `Bearer ${localStorage.getItem("authToken")}`, // notice the Bearer before your token
             }
         }
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
         if (!data.ok) {
             return {
                 isOk: data.ok,
@@ -162,7 +162,7 @@ export async function Insert_Data(url, dataObj) {
             body: JSON.stringify(dataObj)
         }
 
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
 
         if (!data.ok) {
             return {
@@ -201,7 +201,7 @@ export async function Update_Data(url, dataObj) {
             ,
             body: JSON.stringify(dataObj)
         }
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
         if (!data.ok) {
             return {
                 isOk: data.ok,
@@ -240,7 +240,7 @@ export async function Update_FormData(url, dataObj) {
             ,
             body: dataObj
         }
-        data = await fetch(baseURL + url, getListOption)
+        data = await fetch(baseUrl + url, getListOption)
         if (!data.ok) {
             return {
                 isOk: data.ok,

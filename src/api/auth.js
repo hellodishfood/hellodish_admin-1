@@ -1,5 +1,6 @@
 import { LoginApi } from "../Utilities/Api";
-const baseURL = "https://api.hellodish.in/";
+export const baseUrl = "https://api.hellodish.in/";
+//export const baseUrl = "https://rdemo.ecommercesourcecode.com/dish/";
 
 export async function signIn(email, password) {
   try {
